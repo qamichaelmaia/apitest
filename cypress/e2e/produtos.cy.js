@@ -39,7 +39,7 @@ describe('Testes de API em Produtos ', () => {
         });
     });
 
-    it('Deve validar produto cadastrado recentemente', () => {
+    it('Deve validar produto cadastrado recentemente - POST', () => {
         cy.cadastrarProduto(token, 'Mouse Redragon', 213, 'Mouse', 41)
         .should((response) => {
             expect(response.status).to.equal(400);
@@ -47,7 +47,7 @@ describe('Testes de API em Produtos ', () => {
             
         });
     });
-    it('Deve editar um produto com sucesso', () => {
+    it('Deve editar um produto com sucesso - PUT', () => {
         // Gerar nome de produto e descrição aleatórios
         const produto = faker.commerce.productName();
         const descricao = faker.commerce.productDescription();
@@ -72,10 +72,13 @@ describe('Testes de API em Produtos ', () => {
             });
     });
     
-    it.only('Deve deletar um produto com sucesso', () => {
+    it('Deve deletar um produto com sucesso - DELETE', () => {
         //Cadastrar produto antes de editar
         const produtoDelete = faker.commerce.productName()
         cy.cadastrarProduto(token, produtoDelete, 100, 'Descrição do produto que vai ser deletado', 50)
+            .should((response) =>{
+                expect(response.status).to.equal(201)//Bem sucedido mas com criação de produto antes de ser deletado
+            })
             .then(response => {
                 let id = response.body._id
                 cy.request({
